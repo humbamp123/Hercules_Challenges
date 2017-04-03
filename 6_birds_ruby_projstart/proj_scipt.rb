@@ -4,6 +4,7 @@ libft = "git@github.com:humbamp123/libft.git"
 makefile = "git@github.com:humbamp123/Makefile.git"
 
 def gitpush(path)
+  system "touch '#{path}/.gitignore'"
   system "git -C #{path} add ."
   system "git -C #{path} commit -m 'Start Project'"
   system "git -C #{path} push"
@@ -34,6 +35,7 @@ def nextpart(arg, path, makefile, libft)
     newurl = STDIN.gets.chomp
     system "git remote set-url --add --push origin #{giturl}"
     system "git remote set-url --add --push origin #{newurl}"
+    system "git remote -v"
   end
   puts 'What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n(\'4\') Other\n'
   proj_type = STDIN.gets.to_i
@@ -43,42 +45,30 @@ def nextpart(arg, path, makefile, libft)
     puts 'Cool! Do you want to add libft? If so type (\'1\') and press enter, otherwise type (\'0\').'
     yesorno = STDIN.gets.to_i
     if yesorno == 1
-      system "git clone '#{libft}' '#{path}/lib/libft'"
+      system "git clone '#{libft}' '#{path}/src/lib/libft'"
       system "mkdir '#{path}/includes'"
       system "touch '#{path}/author' && echo $USER >> #{path}/author"
-      system "touch '#{path}/run' && echo 'make -C lib/libft/ re\nmake re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o /lib/lib#{arg}.a -I includes/ lib/libft/ -lft -g \nrm main.o' >> #{path}/run"
-      system "touch '#{path}/.gitignore' && rm -rf '#{path}/lib/libft/.git'"
+      system "touch '#{path}/run' && echo 'make -C lib/libft/ re\nmake re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o /src/lib/lib#{arg}.a -I includes/ src/lib/libft/ -lft -g \nrm main.o' >> #{path}/run"
+      system "rm -rf '#{path}/lib/libft/.git'"
       gitpush(path)
     else
       puts 'No libft, OK!'
       system "mkdir '#{path}/includes'"
       system "touch '#{path}/author' && echo $USER >> #{path}/author"
       system "touch '#{path}/run' && echo 'make re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o lib#{arg}.a -I includes/ -g \nrm main.o' >> #{path}/run"
-      system "touch '#{path}/.gitignore'"
-      system "git -C #{path} add ."
-      system "git -C #{path} commit -m 'Create project'"
-      system "git -C #{path} push"
+      gitpush(path)
     end
   elsif proj_type == 2
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
     system "touch '#{path}/#{arg}.rb' && echo '#!/bin/sh\n # Insert stuff below' >> #{path}/#{arg}"
-    system "touch '#{path}/.gitignore'"
-    system "git -C #{path} add ."
-    system "git -C #{path} commit -m 'Create project'"
-    system "git -C #{path} push"
+    gitpush(path)
   elsif proj_type == 3
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
     system "touch '#{path}/#{arg}.sh' && echo '#!/usr/bin/env ruby\n # Insert stuff below' >> #{path}/#{arg}"
-    system "touch '#{path}/.gitignore'"
-    system "git -C #{path} add ."
-    system "git -C #{path} commit -m 'Create project'"
-    system "git -C #{path} push"
+    gitpush(path)
   elsif proj_type == 4
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
-    system "touch '#{path}/.gitignore'"
-    system "git -C #{path} add ."
-    system "git -C #{path} commit -m 'Create project'"
-    system "git -C #{path} push"
+    gitpush(path)
   end
 end
 
