@@ -40,7 +40,7 @@ def nextpart(arg, path, makefile, libft)
   puts 'What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n(\'4\') Other\n'
   proj_type = STDIN.gets.to_i
   if proj_type == 1
-    tmp = '~/tmp/make'
+    tmp = '/tmp/make'
     if File.exists?(tmp)
       system "rm -rf #{tmp}"
     end
