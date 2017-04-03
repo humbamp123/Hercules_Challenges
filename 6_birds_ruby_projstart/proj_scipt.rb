@@ -40,20 +40,26 @@ def nextpart(arg, path, makefile, libft)
   puts 'What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n(\'4\') Other\n'
   proj_type = STDIN.gets.to_i
   if proj_type == 1
-    system "git clone '#{makefile}' '/tmp/make'"
-    system "cp /tmp/make/Makefile #{path}"
+    tmp = '~/tmp/make'
+    if File.exists?(tmp)
+      system "rm -rf #{tmp}"
+    end
+    system "git clone '#{makefile}' '#{tmp}'"
+    system "cp #{tmp}/Makefile #{path}"
     puts 'Cool! Do you want to add libft? If so type (\'1\') and press enter, otherwise type (\'0\').'
     yesorno = STDIN.gets.to_i
     if yesorno == 1
+      system "mkdir '#{path}/src'"
       system "git clone '#{libft}' '#{path}/src/lib/libft'"
       system "mkdir '#{path}/includes'"
       system "touch '#{path}/author' && echo $USER >> #{path}/author"
-      system "touch '#{path}/run' && echo 'make -C lib/libft/ re\nmake re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o /src/lib/lib#{arg}.a -I includes/ src/lib/libft/ -lft -g \nrm main.o' >> #{path}/run"
-      system "rm -rf '#{path}/lib/libft/.git'"
+      system "touch '#{path}/run' && echo 'make -C src/lib/libft/ re\nmake re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o src/lib/lib#{arg}.a -I includes/ src/lib/libft/ -lft -g \nrm main.o' >> #{path}/run"
+      system "rm -rf '#{path}/src/lib/libft/.git'"
       gitpush(path)
     else
       puts 'No libft, OK!'
       system "mkdir '#{path}/includes'"
+      system "mkdir '#{path}/src'"
       system "touch '#{path}/author' && echo $USER >> #{path}/author"
       system "touch '#{path}/run' && echo 'make re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o lib#{arg}.a -I includes/ -g \nrm main.o' >> #{path}/run"
       gitpush(path)
@@ -92,6 +98,7 @@ else
         removefiles = gets.to_i
         if removefiles == 1
           system 'rm -rf #{path}'
+          nextpart(arg, path, makefile, libft)
         else
           puts 'The files were not removed, please run the script again.'
           exit
