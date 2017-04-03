@@ -33,9 +33,9 @@ def nextpart(arg, path, makefile, libft)
   if another_git == 1
     puts 'Please enter another github url.'
     newurl = STDIN.gets.chomp
-    system "git remote set-url --add --push origin #{giturl}"
-    system "git remote set-url --add --push origin #{newurl}"
-    system "git remote -v"
+    system "git -C #{path} remote set-url --add --push origin #{giturl}"
+    system "git -C #{path} remote set-url --add --push origin #{newurl}"
+    system "git -C #{path} remote -v"
   end
   puts 'What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n(\'4\') Other\n'
   proj_type = STDIN.gets.to_i
