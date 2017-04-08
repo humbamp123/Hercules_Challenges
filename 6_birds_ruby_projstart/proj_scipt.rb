@@ -3,6 +3,37 @@
 libft = "git@github.com:humbamp123/libft.git"
 makefile = "git@github.com:humbamp123/Makefile.git"
 
+class String
+  # colorization
+  def colorize(color_code)
+    "\e[#{color_code}m#{self}\e[0m"
+  end
+
+  def red
+    colorize(31)
+  end
+
+  def green
+    colorize(32)
+  end
+
+  def yellow
+    colorize(33)
+  end
+
+  def blue
+    colorize(34)
+  end
+
+  def pink
+    colorize(35)
+  end
+
+  def light_blue
+    colorize(36)
+  end
+end
+
 def gitpush(path)
   system "touch '#{path}/.gitignore'"
   system "git -C #{path} add ."
@@ -11,7 +42,7 @@ def gitpush(path)
 end
 
 def nextpart(arg, path, makefile, libft)
-  puts 'AWESOME! Please enter a github url'
+  puts 'AWESOME! Please enter a github url'.green
   begin
     counter ||= 3
     giturl = STDIN.gets.chomp
@@ -21,23 +52,23 @@ def nextpart(arg, path, makefile, libft)
     end
   rescue
     if (counter -= 1) > 0
-      puts 'Git clone did not seem to work. Please try entering the URL again.'
+      puts 'Git clone did not seem to work. Please try entering the URL again.'.yellow
       retry
     else
-      puts 'Please try running the script again.'
+      puts 'Please try running the script again.'.red
     end
     exit
   end
-  puts 'Do you want to add another git url? If so type (\'1\') and press enter, otherwise type (\'0\').'
+  puts 'Do you want to add another git url? If so type (\'1\') and press enter, otherwise type (\'0\').'.green
   another_git = STDIN.gets.to_i
   if another_git == 1
-    puts 'Please enter another github url.'
+    puts 'Please enter another github url.'.green
     newurl = STDIN.gets.chomp
     system "git -C #{path} remote set-url --add --push origin #{giturl}"
     system "git -C #{path} remote set-url --add --push origin #{newurl}"
     system "git -C #{path} remote -v"
   end
-  puts 'What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n(\'4\') Other\n'
+  puts 'What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n(\'4\') Other\n'.green
   proj_type = STDIN.gets.to_i
   if proj_type == 1
     tmp = '/tmp/make'
@@ -46,7 +77,7 @@ def nextpart(arg, path, makefile, libft)
     end
     system "git clone '#{makefile}' '#{tmp}'"
     system "cp #{tmp}/Makefile #{path}"
-    puts 'Cool! Do you want to add libft? If so type (\'1\') and press enter, otherwise type (\'0\').'
+    puts 'Cool! Do you want to add libft? If so type (\'1\') and press enter, otherwise type (\'0\').'.green
     yesorno = STDIN.gets.to_i
     if yesorno == 1
       system "mkdir '#{path}/src'"
@@ -72,41 +103,91 @@ def nextpart(arg, path, makefile, libft)
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
     system "touch '#{path}/#{arg}.sh' && echo '#!/usr/bin/env ruby\n # Insert stuff below' >> #{path}/#{arg}"
     gitpush(path)
-  elsif proj_type == 4
+  else
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
     gitpush(path)
   end
 end
 
+def whereareyou (local)
+  puts 'Are you at school? If so type (\'1\') and press enter, otherwise type (\'0\').'.green
+  answer = STDIN.gets.to_i
+  if answer == 1
+    home = "~"
+    local = home + whereto(local)
+  else
+    home = "~/Destop"
+    local = home + whereto(local)
+  end
+end
+
+def whereto (dest)
+  puts 'Is it a side project? If so (\'1\') and press enter, otherwise type (\'0\').'.green
+  answer = STDIN.gets.to_i
+  if answer == 1
+    dest = "/"
+  else
+    dest = "/cadet/"
+  end
+end
+
+def whatdo(arg, path, makefile, libft)
+  if File.exists? path
+    puts 'File or Folder already exists'.red
+    size = Dir.entries(path).length - 2
+    if size == 1
+      puts 'There is 1 file/directory in this folder'.yellow
+    elsif size > 1
+      puts 'There are '.yellow + size.to_s.yellow + 'files/directories in this folder'.yellow
+    end
+    if Dir.entries(path).length > 2
+      puts "-------------------------------------------------".light_blue
+      Dir.foreach(path) do |f|
+        next if f == "." or f == ".."
+        i = 1
+        puts "file".yellow + " " + i.to_s.yellow + " is ".yellow + f.red
+        i = i + 1
+      end
+      puts "-------------------------------------------------".light_blue
+      puts 'The files above are in the folder you are trying to create. If you would like to remove them and continue with the git clone type (\'1\') otherwise, please run the script again and enter a project name that doesn\'t already exist.'.red
+      removefiles = STDIN.gets.to_i
+      if removefiles == 1
+        system "rm -rf #{path}"
+        nextpart(arg, path, makefile, libft)
+        exit
+      else
+        puts 'The files were not removed, please run the script again.'.red
+        exit
+      end
+    end
+    puts 'If you would still like to git clone to the same directory type (\'1\'), otherwise type (\'0\') and try running the script again'.green
+    sure = STDIN.gets.to_i
+    if sure == 1
+      nextpart(arg, path, makefile, libft)
+    else
+      puts 'You did not git clone. If you would like to start a new project please run the script again.'.red
+      exit
+    end
+  else
+    nextpart(arg, path, makefile, libft)
+    puts 'Script complete!'.green
+  end
+end
 
 if ARGV.size < 1
-  puts 'Too few arguments. Please include the name of the project as an argument'
-  puts 'usage: ./proj_script.rb <project_name>'
+  puts 'Too few arguments. Please include the name of the project as an argument'.red
+  puts 'usage: ./proj_script.rb <project_name>'.red
   exit
 elsif ARGV.size > 1
-  puts 'Please enter only one project.'
-  puts 'usage: ./proj_script.rb <project_name>'
+  puts 'Please enter only one project.'.red
+  puts 'usage: ./proj_script.rb <project_name>'.red
   exit
 else
-  puts 'Alright lets see if this works'
+  puts 'Alright lets see if this works'.green
+  location = whereareyou(location)
   ARGV.each do |arg|
-    path = File.expand_path("~/cadet/#{arg}")
-    if File.exists? path
-      puts 'File or Folder already exists'
-      if Dir.entries(path).size <= 2
-        puts 'File are in the folder you are trying to create. If you would like to remove them and continue with the git clone type (\'1\') otherwise, please run the script again and enter a project name that doesn\'t already exist.'
-        removefiles = gets.to_i
-        if removefiles == 1
-          system 'rm -rf #{path}'
-          nextpart(arg, path, makefile, libft)
-        else
-          puts 'The files were not removed, please run the script again.'
-          exit
-        end
-      end
-      puts 'If you would still like to git clone to the same directory type (\'1\'), otherwise type (\'0\') and run try running the script again'
-    else
-      nextpart(arg, path, makefile, libft)
-    end
+    path = File.expand_path("#{location}/#{arg}")
+    puts 'Your path is "'.green + path.green + '"'.green
+    whatdo(arg, path, makefile, libft)
   end
 end
