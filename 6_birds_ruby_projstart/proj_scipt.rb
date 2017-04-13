@@ -66,9 +66,10 @@ def nextpart(arg, path, makefile, libft)
     newurl = STDIN.gets.chomp
     system "git -C #{path} remote set-url --add --push origin #{giturl}"
     system "git -C #{path} remote set-url --add --push origin #{newurl}"
+    system "git -C #{path} remote add gh #{newurl}"
     system "git -C #{path} remote -v"
   end
-  puts 'What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n(\'4\') Other\n'.green
+  puts "What kind of project is it?\n (\'1\') C\n (\'2\') Shell\n (\'3\') Ruby\n (\'4\') Other\n".green
   proj_type = STDIN.gets.to_i
   if proj_type == 1
     tmp = '/tmp/make'
@@ -187,7 +188,7 @@ else
   location = whereareyou(location)
   ARGV.each do |arg|
     path = File.expand_path("#{location}/#{arg}")
-    puts 'Your path is "'.green + path.green + '"'.green
+    puts 'Your path is "'.blue + path.green + '"'.blue
     whatdo(arg, path, makefile, libft)
   end
 end
