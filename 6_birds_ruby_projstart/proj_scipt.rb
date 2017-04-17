@@ -98,11 +98,11 @@ def nextpart(arg, path, makefile, libft)
     end
   elsif proj_type == 2
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
-    system "touch '#{path}/#{arg}.rb' && echo '#!/bin/sh\n # Insert stuff below' >> #{path}/#{arg}"
+    system "touch '#{path}/#{arg}.sh' && echo '#!/bin/sh\n # Insert stuff below' >> #{path}/#{arg}.sh"
     gitpush(path)
   elsif proj_type == 3
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
-    system "touch '#{path}/#{arg}.sh' && echo '#!/usr/bin/env ruby\n # Insert stuff below' >> #{path}/#{arg}"
+    system "touch '#{path}/#{arg}.rb' && echo '#!/usr/bin/env ruby\n # Insert stuff below' >> #{path}/#{arg}.rb"
     gitpush(path)
   else
     system "touch '#{path}/author' && echo $USER >> #{path}/author"
@@ -123,12 +123,18 @@ def whereareyou (local)
 end
 
 def whereto (dest)
-  puts 'Is it a side project? If so (\'1\') and press enter, otherwise type (\'0\').'.green
+  puts "What kind of project is it?\n (\'1\') Side Project\n (\'2\') Hercules\n (\'3\') School Project\n (\'4\') Other\n".green
   answer = STDIN.gets.to_i
   if answer == 1
     dest = "/"
-  else
+  elsif answer == 2
+    dest = "/Hercules_Challenges/"
+  elsif answer == 3
     dest = "/cadet/"
+  else
+    puts 'Please input a directory'
+    newdir = STDIN.gets.chomp
+    dest = "/#{newdir}/"
   end
 end
 

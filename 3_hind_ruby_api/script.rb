@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require "oauth2"
 
 module Constants
