@@ -1,0 +1,26 @@
+// ON VM
+apt-get update
+apt-get upgrade
+apt-get --assume-yes install openssh-server
+sed -i -e 's/Port 22/Port 50888/g' /etc/ssh/sshd_config
+service ssh restart
+apt-get install sudo
+usermod -a -G sudo andres
+
+// ON LOCAL
+ssh-keygen -t rsa \\Dont use a passphrase
+ssh andres@192.168.38.129 -p 50888 mkdir -p .ssh //enter password
+cat test_rsa.pub | ssh andres@192.168.38.129 -p 50888 'cat >> .ssh/authorized_keys' //enter password
+
+ssh andres@192.168.38.129 -p 50888
+
+// ON VM
+sed -i -e 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sed -i -e 's/PermitRootLogin/PermitRootLogin no\n#PermitRootLogin/g' /etc/ssh/sshd_config
+service ssh restart
+
+// TO test
+cat test_rsa.pub
+// ssh into VM with no pw
+ssh andres@192.168.38.129 -p 50888
+// compare .ssh/authorized_keys with cat test_rsa.pub 
