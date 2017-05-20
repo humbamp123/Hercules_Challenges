@@ -77,7 +77,7 @@ def nextpart(arg, path, makefile, libft)
       system "rm -rf #{tmp}"
     end
     system "git clone '#{makefile}' '#{tmp}'"
-    system "cp #{tmp}/Makefile #{path}"
+    system "cp #{tmp}/* #{path}"
     puts 'Cool! Do you want to add libft? If so type (\'1\') and press enter, otherwise type (\'0\').'.green
     yesorno = STDIN.gets.to_i
     if yesorno == 1
