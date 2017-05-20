@@ -82,7 +82,7 @@ def nextpart(arg, path, makefile, libft)
     yesorno = STDIN.gets.to_i
     if yesorno == 1
       system "mkdir '#{path}/src'"
-      system "git clone '#{libft}' '#{path}/src/lib/libft'"
+      system "git clone '#{libft}' '#{path}/src/libft'"
       system "mkdir '#{path}/inc'"
       system "touch '#{path}/author' && echo $USER >> #{path}/author"
       system "touch '#{path}/run' && echo 'make -C src/lib/libft/ re\nmake re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o src/lib/lib#{arg}.a -I includes/ src/lib/libft/ -lft -g \nrm main.o' >> #{path}/run"
