@@ -88,10 +88,10 @@ def nextpart(arg, path, makefile, libft)
       gitpush(path)
     else
       puts 'No libft, OK!'
-      system "mkdir '#{path}/includes'"
+      system "mkdir '#{path}/inc'"
       system "mkdir '#{path}/src'"
       system "touch '#{path}/author' && echo $USER >> #{path}/author"
-      system "touch '#{path}/run' && echo 'make re\nclang -Wall -Wextra -Werror -I includes/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o lib#{arg}.a -I includes/ -g \nrm main.o' >> #{path}/run"
+      system "touch '#{path}/run' && echo 'make re\nclang -Wall -Wextra -Werror -I inc/ -o main.o -c main.c -g \nclang -o test_#{arg} main.o lib#{arg}.a -I inc/ -g \nrm main.o' >> #{path}/run"
       gitpush(path)
     end
   elsif proj_type == 2
