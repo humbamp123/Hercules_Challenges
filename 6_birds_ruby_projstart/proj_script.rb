@@ -114,7 +114,7 @@ def whereareyou (local)
     home = "~"
     local = home + whereto(local)
   else
-    home = "~/Destop"
+    home = "~/Desktop"
     local = home + whereto(local)
   end
 end
